@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const API = "https://practice-login-auth.onrender.com";
+const API = import.meta.env.VITE_API_URL;
 
 function cls(...arr) {
   return arr.filter(Boolean).join(" ");
