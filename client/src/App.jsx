@@ -7,7 +7,7 @@ function cls(...arr) {
 }
 
 export default function App() {
-  const [tab, setTab] = useState("login"); // "login" | "register"
+  const [tab, setTab] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,7 +15,7 @@ export default function App() {
   const isAuthed = useMemo(() => Boolean(token), [token]);
 
   const [loading, setLoading] = useState(false);
-  const [notice, setNotice] = useState(null); // { type: "ok"|"err", text: string }
+  const [notice, setNotice] = useState(null);
   const [me, setMe] = useState(null);
 
   function toast(type, text) {
@@ -23,7 +23,6 @@ export default function App() {
   }
 
   function clearMsgSoon() {
-    // kis UX: üzenet eltűnik
     setTimeout(() => setNotice(null), 4000);
   }
 
@@ -54,7 +53,7 @@ export default function App() {
 
     try {
       if (!email || !password) {
-        toast("err", "Email és jelszó kötelező.");
+        toast("err", "Email and password are required.");
         return;
       }
 
@@ -65,11 +64,11 @@ export default function App() {
         });
 
         if (!r.ok) {
-          toast("err", r.data?.error || `Register hiba (${r.status})`);
+          toast("err", r.data?.error || `Register error (${r.status})`);
           return;
         }
 
-        toast("ok", "Sikeres regisztráció. Most lépj be.");
+        toast("ok", "Registration successful. Please log in now.");
         clearMsgSoon();
         setTab("login");
         return;
@@ -82,17 +81,17 @@ export default function App() {
         });
 
         if (!r.ok) {
-          toast("err", r.data?.error || `Login hiba (${r.status})`);
+          toast("err", r.data?.error || `Login error (${r.status})`);
           return;
         }
 
         if (r.data?.token) {
           localStorage.setItem("token", r.data.token);
           setToken(r.data.token);
-          toast("ok", "Sikeres belépés.");
+          toast("ok", "Login successful!");
           clearMsgSoon();
         } else {
-          toast("err", "Nem érkezett token a szervertől.");
+          toast("err", "No token was received from the server.");
         }
       }
     } finally {
@@ -108,12 +107,12 @@ export default function App() {
       const r = await callJSON("/api/me", { auth: true });
 
       if (!r.ok) {
-        toast("err", r.data?.error || ` /me hiba (${r.status})`);
+        toast("err", r.data?.error || ` /me error. (${r.status})`);
         return;
       }
 
       setMe(r.data?.user || null);
-      toast("ok", "Token OK, /me sikerült.");
+      toast("ok", "Token OK, /me successful.");
       clearMsgSoon();
     } finally {
       setLoading(false);
@@ -124,11 +123,10 @@ export default function App() {
     localStorage.removeItem("token");
     setToken("");
     setMe(null);
-    toast("ok", "Kijelentkezve.");
+    toast("ok", "Logged out.");
     clearMsgSoon();
   }
 
-  // ha van token, kérjük le automatikusan a /me-t egyszer
   useEffect(() => {
     if (token) fetchMe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -242,15 +240,15 @@ export default function App() {
                 )}
               >
                 {loading
-                  ? "Dolgozom..."
+                  ? "Loading..."
                   : tab === "login"
                     ? "Login"
                     : "Create account"}
               </button>
 
               <p className="text-xs text-slate-500">
-                Tipp: regisztráció után válts Login-ra és lépj be ugyanazzal az
-                email/jelszóval.
+                Tip: After registration, switch to Login and sign in using the
+                same email/password.
               </p>
             </form>
           )}
@@ -260,7 +258,7 @@ export default function App() {
             <div className="mt-6 space-y-4">
               <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-4">
                 <div className="text-xs text-slate-400 mb-2">
-                  Token (rövidítve)
+                  Token (small verison.)
                 </div>
                 <div className="text-xs break-all text-slate-200">
                   {token.slice(0, 28)}...{token.slice(-18)}
@@ -285,7 +283,7 @@ export default function App() {
                     localStorage.removeItem("token");
                     setToken("");
                     setMe(null);
-                    toast("ok", "Token törölve.");
+                    toast("ok", "Token deleted.");
                     clearMsgSoon();
                   }}
                   className="flex-1 rounded-2xl py-3 font-semibold bg-slate-800 hover:bg-slate-700 transition"
@@ -299,7 +297,7 @@ export default function App() {
                 <pre className="text-xs whitespace-pre-wrap break-words text-slate-200">
                   {me
                     ? JSON.stringify(me, null, 2)
-                    : "No data yet (kattints Get /me)"}
+                    : "No data yet (Click Get /me)"}
                 </pre>
               </div>
             </div>
