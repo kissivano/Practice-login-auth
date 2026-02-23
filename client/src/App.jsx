@@ -307,7 +307,7 @@ export default function App() {
         </div>
 
         <p className="mt-4 text-center text-xs text-slate-600">
-          Backend: localhost:4000 • Frontend: localhost:5173
+          Backend: render.com • Frontend: vercel.com
         </p>
       </div>
     </div>
