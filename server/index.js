@@ -153,8 +153,8 @@ app.get("/api/me", requireAuth, (req, res) => {
   res.json({ user: req.user });
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log(`API running on http://localhost:${PORT}`);
+  console.log(`API running on port ${PORT}`);
 });
