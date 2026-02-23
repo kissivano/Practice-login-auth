@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const API = "http://localhost:4000";
+const API = "https://practice-login-auth.onrender.com";
 
 function cls(...arr) {
   return arr.filter(Boolean).join(" ");
